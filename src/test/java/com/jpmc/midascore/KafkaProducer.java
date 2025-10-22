@@ -1,22 +1,25 @@
 package com.jpmc.midascore;
 
-import com.jpmc.midascore.foundation.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 public class KafkaProducer {
-    private final String topic;
-    private final KafkaTemplate<String, Transaction> kafkaTemplate;
 
-    public KafkaProducer(@Value("${general.kafka-topic}") String topic, KafkaTemplate<String, Transaction> kafkaTemplate) {
-        this.topic = topic;
-        this.kafkaTemplate = kafkaTemplate;
-    }
+    // 1. FIX: Use the correct topic property
+    @Value("${kafka.topic.transactions}")
+    private String topicName;
 
-    public void send(String transactionLine) {
-        String[] transactionData = transactionLine.split(", ");
-        kafkaTemplate.send(topic, new Transaction(Long.parseLong(transactionData[0]), Long.parseLong(transactionData[1]), Float.parseFloat(transactionData[2])));
+    // 2. FIX: Change template to send a <String, String>
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+
+    // 3. FIX: Send the raw message directly.
+    //    The test sends the CSV string, so just pass it along.
+    //    Your KafkaConsumer is responsible for parsing it.
+    public void send(String message){
+        kafkaTemplate.send(topicName, message);
     }
 }
