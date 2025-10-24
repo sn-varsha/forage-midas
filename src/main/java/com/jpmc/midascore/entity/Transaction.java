@@ -12,13 +12,16 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
-    private UserRecord sender; // <-- Uses your UserRecord class
+    private UserRecord sender;
 
     @ManyToOne
     @JoinColumn(name = "recipient_id", nullable = false)
-    private UserRecord recipient; // <-- Uses your UserRecord class
+    private UserRecord recipient;
 
-    private float amount; // <-- Uses float to match your UserRecord's balance
+    private float amount;
+
+    // 1. ADD THIS NEW FIELD
+    private float incentive;
 
     // --- Constructors ---
     public Transaction() {
@@ -55,5 +58,14 @@ public class Transaction {
 
     public void setAmount(float amount) {
         this.amount = amount;
+    }
+
+    // 2. ADD GETTER AND SETTER FOR THE NEW FIELD
+    public float getIncentive() {
+        return incentive;
+    }
+
+    public void setIncentive(float incentive) {
+        this.incentive = incentive;
     }
 }

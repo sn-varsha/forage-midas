@@ -15,6 +15,9 @@ public class TaskFourTests {
     static final Logger logger = LoggerFactory.getLogger(TaskFourTests.class);
 
     @Autowired
+    private com.jpmc.midascore.repository.UserRecordRepository userRecordRepository;
+
+    @Autowired
     private KafkaProducer kafkaProducer;
 
     @Autowired
