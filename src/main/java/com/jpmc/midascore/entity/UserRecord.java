@@ -1,12 +1,14 @@
 package com.jpmc.midascore.entity;
 
 import jakarta.persistence.*;
+import java.util.Set;
 
 @Entity
+@Table(name = "users")
 public class UserRecord {
 
     @Id
-    @GeneratedValue()
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // <-- Added strategy
     private long id;
 
     @Column(nullable = false)
@@ -14,6 +16,12 @@ public class UserRecord {
 
     @Column(nullable = false)
     private float balance;
+
+    @OneToMany(mappedBy = "sender")
+    private Set<Transaction> transactionsSent;
+
+    @OneToMany(mappedBy = "recipient")
+    private Set<Transaction> transactionsReceived;
 
     protected UserRecord() {
     }
@@ -25,7 +33,8 @@ public class UserRecord {
 
     @Override
     public String toString() {
-        return String.format("User[id=%d, name='%s', balance='%f'", id, name, balance);
+        // Updated toString for better logging
+        return "UserRecord[id=" + id + ", name='" + name + "', balance=" + balance + "]";
     }
 
     public Long getId() {
@@ -42,5 +51,21 @@ public class UserRecord {
 
     public void setBalance(float balance) {
         this.balance = balance;
+    }
+
+    public Set<Transaction> getTransactionsSent() {
+        return transactionsSent;
+    }
+
+    public void setTransactionsSent(Set<Transaction> transactionsSent) {
+        this.transactionsSent = transactionsSent;
+    }
+
+    public Set<Transaction> getTransactionsReceived() {
+        return transactionsReceived;
+    }
+
+    public void setTransactionsReceived(Set<Transaction> transactionsReceived) {
+        this.transactionsReceived = transactionsReceived;
     }
 }
